@@ -2,480 +2,214 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hydra Corp - Global Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Simulador de Crédito Profissional</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --hydra-cyan: #00e5ff;
-            --hydra-purple: #9d4edd;
-            --hydra-bg: #030712;
-            --hydra-card-bg: #0a0f1d;
-            --hydra-border: #1e293b;
-        }
-
         body {
-            background-color: var(--hydra-bg);
-            color: #ffffff;
             font-family: 'Inter', sans-serif;
-            -webkit-font-smoothing: antialiased;
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            min-height: 100vh;
+            -webkit-tap-highlight-color: transparent;
         }
-
-        .font-brand { font-family: 'Outfit', sans-serif; }
-
-        .sidebar {
-            background: #010409;
-            border-right: 1px solid var(--hydra-border);
+        .glass-card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
         }
-
-        .sidebar-logo {
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
-            object-fit: cover;
-            border: 1px solid rgba(0, 229, 255, 0.3);
-            box-shadow: 0 0 15px rgba(0, 229, 255, 0.1);
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
         }
-
-        .nav-link {
-            color: #64748b;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            font-weight: 700;
-            letter-spacing: 0.05em;
-            transition: all 0.2s;
-            border-radius: 12px;
-            margin-bottom: 4px;
+        /* Otimização para toque no celular */
+        .touch-target {
+            min-height: 48px;
         }
-
-        .nav-link:hover, .nav-link.active {
-            color: var(--hydra-cyan);
-            background: rgba(0, 229, 255, 0.05);
-            border: 1px solid rgba(0, 229, 255, 0.2);
+        @media (max-width: 640px) {
+            .mobile-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
         }
-
-        .card-global {
-            background: var(--hydra-card-bg);
-            border-radius: 24px;
-            border: 1px solid #1e293b;
-            overflow: hidden;
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .card-global:hover {
-            transform: translateY(-5px);
-            border-color: var(--hydra-cyan);
-        }
-
-        .card-image-container {
-            position: relative;
-            height: 200px;
-            background: #111827;
-        }
-
-        .card-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.9;
-        }
-
-        .lvl-badge {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: var(--hydra-cyan);
-            color: #000;
-            font-size: 10px;
-            font-weight: 900;
-            padding: 5px 12px;
-            border-radius: 30px;
-            box-shadow: 0 0 20px rgba(0, 229, 255, 0.4);
-        }
-
-        .class-badge {
-            position: absolute;
-            bottom: -12px;
-            left: 20px;
-            background: var(--hydra-purple);
-            color: #fff;
-            font-size: 10px;
-            font-weight: 800;
-            padding: 5px 15px;
-            border-radius: 6px;
-            text-transform: uppercase;
-            z-index: 10;
-            box-shadow: 0 4px 10px rgba(157, 78, 221, 0.3);
-        }
-
-        .btn-register {
-            background: #0ea5e9;
-            color: #000;
-            font-weight: 800;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            padding: 12px 24px;
-            border-radius: 30px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: all 0.2s;
-        }
-
-        .input-global {
-            background: #0f172a !important;
-            border: 1px solid #1e293b !important;
-            color: #fff;
-            padding: 14px;
-            border-radius: 12px;
-            font-size: 0.85rem;
-        }
-
-        .modal-bg {
-            background: rgba(0, 0, 0, 0.9);
-            backdrop-filter: blur(12px);
-        }
-
-        .section-content { animation: fadeIn 0.4s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .custom-scroll::-webkit-scrollbar { width: 6px; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
     </style>
 </head>
-<body class="flex min-h-screen">
-
-    <!-- Sidebar Lateral -->
-    <aside class="sidebar w-72 fixed h-full flex flex-col p-8 z-50">
-        <div class="mb-14 flex items-center gap-4">
-            <img src="https://i.imgur.com/SaDLhFw.jpeg" alt="Hydra Logo" class="sidebar-logo">
-            <div>
-                <h1 class="font-brand text-lg font-extrabold tracking-tighter uppercase leading-none">Hydra</h1>
-                <span class="text-[10px] text-cyan-500 font-black tracking-[0.2em] uppercase">Corporation</span>
-            </div>
+<body class="py-6 px-4 md:py-10">
+    <div class="max-w-md mx-auto md:max-w-4xl">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-2xl font-extrabold text-gray-900 md:text-4xl mb-2">Simulador de Empréstimo</h1>
+            <p class="text-gray-500 text-sm">Rápido, seguro e sem burocracia.</p>
         </div>
 
-        <nav class="flex-1 space-y-1">
-            <button onclick="showSection('showcase')" class="nav-link active w-full text-left p-4 flex items-center gap-4">
-                <span class="text-lg">👤</span> VITRINE GLOBAL
-            </button>
-            <button onclick="showSection('service-xp')" class="nav-link w-full text-left p-4 flex items-center gap-4">
-                <span class="text-lg">📈</span> PAINEL XP
-            </button>
-            <button onclick="showSection('service-quest')" class="nav-link w-full text-left p-4 flex items-center gap-4">
-                <span class="text-lg">⚔️</span> QUEST LOG
-            </button>
-            <button onclick="showSection('drops')" class="nav-link w-full text-left p-4 flex items-center gap-4">
-                <span class="text-lg">💰</span> CALCULADORA
-            </button>
-        </nav>
-
-        <div class="mt-auto pt-6">
-            <div class="p-5 bg-slate-900/50 rounded-2xl border border-slate-800">
-                <p class="text-[9px] text-slate-500 uppercase font-black tracking-widest mb-2">Cloud Status</p>
-                <div class="flex items-center gap-2">
-                    <span id="syncStatusDot" class="w-2 h-2 rounded-full bg-slate-700"></span>
-                    <span id="syncStatusText" class="text-[10px] font-bold text-slate-500 italic">CONNECTING...</span>
-                </div>
-            </div>
-        </div>
-    </aside>
-
-    <main class="ml-72 flex-1 p-16">
-        <section id="showcase" class="section-content">
-            <div class="flex justify-between items-end mb-12">
-                <div>
-                    <h2 class="font-brand text-4xl font-black italic uppercase tracking-tighter text-white mb-2">VITRINE GLOBAL</h2>
-                    <div class="flex items-center gap-3">
-                        <span class="h-[2px] w-12 bg-cyan-500"></span>
-                        <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Base de dados sincronizada</p>
-                    </div>
-                </div>
-                <button onclick="openModal('registerModal')" class="btn-register">
-                    <span class="text-xl">+</span> NOVO REGISTRO
-                </button>
-            </div>
-            <div id="membersList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"></div>
-        </section>
-
-        <section id="service-xp" class="section-content hidden">
-            <h2 class="font-brand text-4xl font-black italic uppercase text-white mb-12">PAINEL XP</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="xpMemberGrid"></div>
-        </section>
-
-        <section id="service-quest" class="section-content hidden">
-            <h2 class="font-brand text-4xl font-black italic uppercase text-white mb-12">QUEST LOG</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="questMemberGrid"></div>
-        </section>
-
-        <section id="drops" class="section-content hidden">
-            <div class="max-w-xl mx-auto p-12 bg-slate-900/80 backdrop-blur border border-slate-800 rounded-[40px]">
-                <h2 class="font-brand text-3xl font-black italic uppercase text-center mb-12">Cálculo de Dividendos</h2>
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+            <!-- Form Side -->
+            <div class="md:col-span-5 glass-card rounded-3xl p-6 md:p-8">
                 <div class="space-y-6">
-                    <input type="text" id="dropName" class="input-global w-full" placeholder="NOME DO ITEM / DROP">
-                    <div class="grid grid-cols-2 gap-4">
-                        <input type="number" id="dropValue" class="input-global" placeholder="VALOR TOTAL">
-                        <input type="number" id="dropPeople" class="input-global" placeholder="MEMBROS">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Quanto você quer receber?</label>
+                        <div class="relative">
+                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">R$</span>
+                            <input type="number" id="desiredValue" placeholder="1000,00" inputmode="decimal"
+                                class="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all text-2xl font-bold text-gray-800"
+                                oninput="calculate()">
+                        </div>
                     </div>
-                    <button onclick="calculateDrop()" class="w-full btn-register py-5 justify-center">Executar Partilha</button>
-                    <div id="dropResult" class="hidden text-center pt-10 border-t border-slate-800 mt-6">
-                        <p class="text-[10px] text-cyan-500 font-black uppercase tracking-widest mb-3">Quota Individual</p>
-                        <p id="resultValue" class="text-5xl font-brand font-black">R$ 0.00</p>
+
+                    <div class="pt-2">
+                        <label class="block text-sm font-semibold text-gray-700 mb-4">Número de parcelas</label>
+                        <div class="grid grid-cols-3 gap-2 mobile-grid" id="installmentGrid">
+                            <!-- JS populated -->
+                        </div>
+                    </div>
+
+                    <button onclick="sendWhatsApp()" class="w-full bg-green-600 hover:bg-green-700 active:scale-95 text-white font-bold py-4 rounded-2xl transition-all shadow-lg shadow-green-200 flex items-center justify-center gap-2 mt-4 touch-target">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                        Solicitar via WhatsApp
+                    </button>
+                </div>
+            </div>
+
+            <!-- Result Side -->
+            <div class="md:col-span-7 space-y-4">
+                <div class="glass-card rounded-3xl p-6 md:p-8 border-l-8 border-green-500">
+                    <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4 md:mb-6">Resumo da Simulação</h3>
+                    
+                    <div class="flex flex-col md:flex-row md:justify-between md:items-end gap-4 mb-8">
+                        <div>
+                            <p class="text-gray-500 text-sm">Total a passar no cartão:</p>
+                            <h2 class="text-3xl md:text-4xl font-black text-gray-900" id="totalCardDisplay">R$ 0,00</h2>
+                        </div>
+                        <div class="md:text-right bg-green-50 p-3 rounded-2xl md:bg-transparent md:p-0">
+                            <p class="text-gray-500 text-sm" id="installmentLabel">Parcelas de:</p>
+                            <p class="text-xl font-bold text-green-600" id="installmentValueDisplay">R$ 0,00</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4 border-t border-gray-100 pt-6">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-500">Valor que você recebe:</span>
+                            <span class="font-bold text-gray-800" id="netValueDisplay">R$ 0,00</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-500">Plano escolhido:</span>
+                            <span class="font-semibold text-gray-800" id="planDisplay">12x</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer Mobile Features -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-white p-4 rounded-2xl shadow-sm flex flex-col items-center text-center">
+                        <div class="bg-blue-50 p-2 rounded-full mb-2">
+                            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                        </div>
+                        <p class="text-[10px] font-bold text-gray-400 uppercase">Liberação</p>
+                        <p class="text-xs font-bold text-gray-700">PIX na hora</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl shadow-sm flex flex-col items-center text-center">
+                        <div class="bg-orange-50 p-2 rounded-full mb-2">
+                            <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                        </div>
+                        <p class="text-[10px] font-bold text-gray-400 uppercase">Segurança</p>
+                        <p class="text-xs font-bold text-gray-700">Visa & Master</p>
                     </div>
                 </div>
             </div>
-        </section>
-    </main>
-
-    <div id="registerModal" class="modal-bg fixed inset-0 z-[100] hidden flex items-center justify-center p-6">
-        <div class="w-full max-w-lg bg-[#0a0f1d] border border-slate-800 p-12 rounded-[40px] shadow-2xl">
-            <h3 class="font-brand text-2xl font-black uppercase text-cyan-400 mb-10">Cadastrar Novo Membro</h3>
-            <form id="regForm" class="space-y-5">
-                <input type="text" id="regNick" placeholder="NICKNAME IN-GAME" class="input-global w-full" required>
-                <div class="grid grid-cols-2 gap-4">
-                    <input type="number" id="regLevel" placeholder="LEVEL ATUAL" class="input-global" required>
-                    <input type="text" id="regClass" placeholder="CLASSE" class="input-global" required>
-                </div>
-                <input type="text" id="regName" placeholder="NOME DO OPERADOR" class="input-global w-full" required>
-                <input type="text" id="regWhatsapp" placeholder="WHATSAPP (EX: 819...)" class="input-global w-full" required>
-                <div class="pt-4">
-                    <label class="text-[10px] font-black text-slate-500 uppercase mb-2 block ml-1">Avatar de Perfil (URL ou Vazio para padrão)</label>
-                    <input type="text" id="regPhotoUrl" class="input-global w-full" placeholder="https://...">
-                </div>
-                <div class="flex gap-6 pt-10">
-                    <button type="button" onclick="closeModal('registerModal')" class="flex-1 text-[11px] font-black uppercase text-slate-500 hover:text-white transition">Cancelar</button>
-                    <button type="submit" class="flex-1 btn-register py-4 justify-center">Confirmar</button>
-                </div>
-            </form>
         </div>
     </div>
 
-    <div id="logsModal" class="modal-bg fixed inset-0 z-[100] hidden flex items-center justify-center p-6">
-        <div class="w-full max-w-2xl bg-[#0a0f1d] border border-slate-800 h-[85vh] flex flex-col p-12 rounded-[50px] shadow-2xl">
-            <h3 id="logsTitle" class="font-brand text-3xl font-black uppercase text-cyan-400 mb-10">Histórico</h3>
-            <div id="logsContent" class="flex-1 overflow-y-auto space-y-8 pr-6 custom-scroll"></div>
-            <button onclick="closeModal('logsModal')" class="mt-10 text-[11px] font-black uppercase text-slate-600 hover:text-white transition text-center">Fechar Histórico</button>
-        </div>
-    </div>
+    <script>
+        const WHATSAPP_NUMBER = "5581985991521";
+        const RATES = {
+            "Debito": 7.69, "1x": 10, "2x": 11.85, "3x": 12.55, "4x": 13.25,
+            "5x": 13.65, "6x": 13.95, "7x": 14.49, "8x": 15.12, "9x": 15.75,
+            "10x": 16.25, "11x": 16, "12x": 17.33, "13x": 18.02, "14x": 20.62,
+            "15x": 12.22, "16x": 22.81, "17x": 23.90, "18x": 22.74
+        };
 
-    <!-- Firebase SDK -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-        import { getFirestore, collection, onSnapshot, addDoc, updateDoc, doc, query, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
+        let selectedPlan = "12x";
+        let globalTotalCard = 0;
+        let globalInstallment = 0;
+        let globalNetValue = 0;
 
-        const firebaseConfig = JSON.parse(__firebase_config);
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'hydra-corp-v1';
+        function initGrid() {
+            const grid = document.getElementById('installmentGrid');
+            Object.keys(RATES).forEach(key => {
+                const button = document.createElement('button');
+                button.innerText = key;
+                button.id = `btn-${key}`;
+                button.className = "py-4 px-1 rounded-2xl text-sm font-bold border-2 transition-all touch-target " + 
+                    (key === selectedPlan ? "bg-green-600 text-white border-green-600 shadow-md shadow-green-100" : "bg-white text-gray-500 border-gray-100");
+                
+                button.onclick = () => {
+                    selectedPlan = key;
+                    updateUI();
+                };
+                grid.appendChild(button);
+            });
+            calculate();
+        }
 
-        let members = [];
-        const hydraLogo = "https://i.imgur.com/G3P2JpT.jpeg";
+        function formatCurrency(value) {
+            return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
 
-        // Auth Listener - Garante que as queries só ocorram APÓS o login
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                document.getElementById('syncStatusDot').className = "w-2 h-2 rounded-full bg-emerald-500 animate-pulse";
-                document.getElementById('syncStatusText').innerText = "LIVE SYNC ACTIVE";
-                document.getElementById('syncStatusText').className = "text-[10px] font-bold text-emerald-500";
-                startListening();
-            } else {
-                initAuth();
-            }
-        });
-
-        async function initAuth() {
-            try {
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
+        function updateUI() {
+            const buttons = document.querySelectorAll('#installmentGrid button');
+            buttons.forEach(btn => {
+                if (btn.innerText === selectedPlan) {
+                    btn.classList.add('bg-green-600', 'text-white', 'border-green-600', 'shadow-md');
+                    btn.classList.remove('bg-white', 'text-gray-500', 'border-gray-100');
                 } else {
-                    await signInAnonymously(auth);
+                    btn.classList.remove('bg-green-600', 'text-white', 'border-green-600', 'shadow-md');
+                    btn.classList.add('bg-white', 'text-gray-500', 'border-gray-100');
                 }
-            } catch (error) {
-                console.error("Auth error:", error);
-            }
-        }
-
-        function startListening() {
-            if (!auth.currentUser) return;
-            const q = query(collection(db, 'artifacts', appId, 'public', 'data', 'members'));
-            onSnapshot(q, (snapshot) => {
-                members = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                renderUI();
-            }, (error) => {
-                console.error("Snapshot error:", error);
-                document.getElementById('syncStatusText').innerText = "PERMISSION DENIED";
-                document.getElementById('syncStatusDot').className = "w-2 h-2 rounded-full bg-red-500";
             });
+            calculate();
         }
 
-        window.saveMember = async (memberData) => {
-            if (!auth.currentUser) return;
-            try {
-                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'members'), {
-                    ...memberData,
-                    logs: [],
-                    quests: { AB1: false, AB2: false, AB3: false, CF: false },
-                    activePot: null,
-                    createdAt: serverTimestamp()
-                });
-            } catch (e) { console.error("Error adding member: ", e); }
-        };
-
-        window.updateMember = async (id, data) => {
-            if (!auth.currentUser) return;
-            const memberRef = doc(db, 'artifacts', appId, 'public', 'data', 'members', id);
-            await updateDoc(memberRef, data);
-        };
-
-        window.showSection = (id) => {
-            document.querySelectorAll('.section-content').forEach(s => s.classList.add('hidden'));
-            document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
-            document.getElementById(id).classList.remove('hidden');
-            const btn = Array.from(document.querySelectorAll('.nav-link')).find(b => b.innerText.includes(id.toUpperCase().replace('-', ' ')));
-            if(btn) btn.classList.add('active');
-            renderUI();
-        };
-
-        window.openModal = (id) => document.getElementById(id).classList.remove('hidden');
-        window.closeModal = (id) => document.getElementById(id).classList.add('hidden');
-
-        document.getElementById('regForm').onsubmit = async function(e) {
-            e.preventDefault();
-            const photoUrl = document.getElementById('regPhotoUrl').value || hydraLogo;
-
-            await saveMember({
-                nick: document.getElementById('regNick').value.toUpperCase(),
-                level: document.getElementById('regLevel').value,
-                classe: document.getElementById('regClass').value.toUpperCase(),
-                nomeReal: document.getElementById('regName').value.toUpperCase(),
-                whatsapp: document.getElementById('regWhatsapp').value,
-                photo: photoUrl
-            });
-
-            this.reset();
-            closeModal('registerModal');
-        };
-
-        window.startPot = async (memberId) => {
-            const start = document.getElementById(`start_${memberId}`).value;
-            const end = document.getElementById(`end_${memberId}`).value;
-            if (!start || !end) return;
-            const member = members.find(m => m.id === memberId);
-            const newLogs = [{ time: new Date().toLocaleTimeString(), message: `Serviço iniciado: ${start} - ${end}` }, ...(member.logs || [])];
-            await updateMember(memberId, { activePot: { start, end }, logs: newLogs });
-        };
-
-        window.finishPot = async (memberId) => {
-            const member = members.find(m => m.id === memberId);
-            const newLogs = [{ time: new Date().toLocaleTimeString(), message: `Serviço finalizado com sucesso.` }, ...(member.logs || [])];
-            await updateMember(memberId, { activePot: null, logs: newLogs });
-        };
-
-        window.completeQuest = async (memberId, questKey) => {
-            const member = members.find(m => m.id === memberId);
-            const updatedQuests = { ...(member.quests || {}), [questKey]: true };
-            const newLogs = [{ time: new Date().toLocaleTimeString(), message: `Quest ${questKey} concluída.` }, ...(member.logs || [])];
-            await updateMember(memberId, { quests: updatedQuests, logs: newLogs });
-        };
-
-        window.viewLogs = (memberId) => {
-            const member = members.find(m => m.id === memberId);
-            document.getElementById('logsTitle').innerText = member.nick;
-            const content = document.getElementById('logsContent');
-            content.innerHTML = (!member.logs || member.logs.length === 0) ? 
-                `<div class="h-full flex items-center justify-center text-slate-800 font-black text-xs uppercase tracking-widest">REGISTRO VAZIO</div>` :
-                member.logs.map(l => `
-                    <div class="pb-10 border-b border-slate-800/50 last:border-0">
-                        <span class="text-[10px] font-black text-cyan-500 uppercase tracking-widest">${l.time}</span>
-                        <p class="text-sm text-slate-400 font-medium leading-relaxed mt-2">${l.message}</p>
-                    </div>
-                `).join('');
-            openModal('logsModal');
-        };
-
-        window.calculateDrop = () => {
-            const val = parseFloat(document.getElementById('dropValue').value);
-            const people = parseInt(document.getElementById('dropPeople').value);
-            if (!val || !people) return;
-            const res = (val / people).toFixed(2);
-            document.getElementById('resultValue').innerText = `R$ ${res}`;
-            document.getElementById('dropResult').classList.remove('hidden');
-        };
-
-        function renderUI() {
-            const list = document.getElementById('membersList');
-            if (!list) return;
-            list.innerHTML = members.map(m => `
-                <div class="card-global">
-                    <div class="card-image-container">
-                        <img src="${m.photo}" class="card-image" onerror="this.src='${hydraLogo}'" />
-                        <div class="lvl-badge">LVL ${m.level}</div>
-                        <div class="class-badge">${m.classe}</div>
-                    </div>
-                    <div class="card-content p-8 pt-10">
-                        <h4 class="font-brand text-xl font-bold uppercase mb-1 tracking-tight">${m.nick}</h4>
-                        <p class="text-[10px] text-cyan-500/60 font-black uppercase tracking-widest mb-8">${m.nomeReal}</p>
-                        <div class="flex items-center justify-between pt-6 border-t border-slate-800/80">
-                            <button onclick="window.open('https://wa.me/${m.whatsapp}')" class="bg-slate-800/50 text-[10px] px-4 py-2 rounded-lg font-bold text-slate-300 hover:bg-cyan-500 hover:text-black transition">${m.whatsapp}</button>
-                        </div>
-                        <button onclick="viewLogs('${m.id}')" class="mt-6 w-full text-[9px] font-black uppercase text-slate-700 hover:text-white transition tracking-widest">Aceder Timeline —></button>
-                    </div>
-                </div>
-            `).join('');
-
-            const xpGrid = document.getElementById('xpMemberGrid');
-            if (xpGrid) {
-                xpGrid.innerHTML = members.map(m => `
-                    <div class="card-global p-10 flex flex-col justify-between h-64">
-                        <div class="flex justify-between items-center">
-                            <div class="flex items-center gap-4">
-                                <img src="${m.photo}" class="w-12 h-12 rounded-xl border border-slate-800 object-cover" onerror="this.src='${hydraLogo}'" />
-                                <h4 class="font-brand font-bold uppercase text-base">${m.nick}</h4>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <span class="text-[9px] font-black uppercase tracking-widest ${m.activePot ? 'text-cyan-500' : 'text-slate-700'}">${m.activePot ? 'Online' : 'Standby'}</span>
-                                <span class="w-2 h-2 rounded-full ${m.activePot ? 'bg-cyan-500 animate-pulse' : 'bg-slate-800'}"></span>
-                            </div>
-                        </div>
-                        ${m.activePot ? `
-                            <div class="mt-6">
-                                <p class="text-2xl font-brand font-black mb-6 text-white">${m.activePot.start} — ${m.activePot.end}</p>
-                                <button onclick="finishPot('${m.id}')" class="w-full btn-register py-4 justify-center text-[10px] bg-red-500/20 text-red-500 border border-red-500/30">FINALIZAR</button>
-                            </div>
-                        ` : `
-                            <div class="flex gap-3">
-                                <input type="time" id="start_${m.id}" class="flex-1 input-global text-xs">
-                                <input type="time" id="end_${m.id}" class="flex-1 input-global text-xs">
-                                <button onclick="startPot('${m.id}')" class="btn-register py-3 px-6 text-xs font-black">START</button>
-                            </div>
-                        `}
-                    </div>
-                `).join('');
+        function calculate() {
+            const valInput = document.getElementById('desiredValue').value;
+            globalNetValue = parseFloat(valInput) || 0;
+            const ratePercentage = RATES[selectedPlan];
+            
+            globalTotalCard = globalNetValue + (globalNetValue * (ratePercentage / 100));
+            
+            if (selectedPlan === "Debito" || selectedPlan === "1x") {
+                globalInstallment = globalTotalCard;
+                document.getElementById('installmentLabel').innerText = "Pagamento único:";
+            } else {
+                const numInstallments = parseInt(selectedPlan);
+                globalInstallment = globalTotalCard / numInstallments;
+                document.getElementById('installmentLabel').innerText = `${numInstallments}x de:`;
             }
 
-            const questGrid = document.getElementById('questMemberGrid');
-            if (questGrid) {
-                questGrid.innerHTML = members.map(m => `
-                    <div class="card-global p-10">
-                        <h4 class="font-brand font-bold mb-8 uppercase text-sm border-l-4 border-cyan-500 pl-4">${m.nick}</h4>
-                        <div class="grid grid-cols-2 gap-4">
-                            ${['AB1', 'AB2', 'AB3', 'CF'].map(q => `
-                                <div class="p-5 bg-slate-900/30 border border-slate-800/50 rounded-2xl flex flex-col gap-3">
-                                    <span class="text-[10px] font-black text-slate-500 tracking-widest">${q}</span>
-                                    ${(m.quests && m.quests[q]) ? 
-                                        `<span class="text-emerald-500 text-[10px] font-bold flex items-center gap-1">✓ COMPLETA</span>` : 
-                                        `<button onclick="completeQuest('${m.id}', '${q}')" class="text-[10px] text-cyan-500 font-bold hover:text-white transition text-left">MARCAR FEITA</button>`
-                                    }
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                `).join('');
-            }
+            document.getElementById('totalCardDisplay').innerText = formatCurrency(globalTotalCard);
+            document.getElementById('installmentValueDisplay').innerText = formatCurrency(globalInstallment);
+            document.getElementById('netValueDisplay').innerText = formatCurrency(globalNetValue);
+            document.getElementById('planDisplay').innerText = selectedPlan === "Debito" ? "Débito" : `Crédito ${selectedPlan}`;
         }
+
+        function sendWhatsApp() {
+            if (globalNetValue <= 0) {
+                alert("Por favor, insira um valor válido.");
+                return;
+            }
+
+            const message = `Olá! Realizei uma simulação:\n\n` +
+                `*Valor que quero receber:* ${formatCurrency(globalNetValue)}\n` +
+                `*Plano:* ${selectedPlan}\n` +
+                `*Total no cartão:* ${formatCurrency(globalTotalCard)}\n` +
+                `*Parcelas:* ${document.getElementById('installmentLabel').innerText} ${formatCurrency(globalInstallment)}\n\n` +
+                `Gostaria de prosseguir com a solicitação!`;
+
+            const encodedMessage = encodeURIComponent(message);
+            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`, '_blank');
+        }
+
+        window.onload = initGrid;
     </script>
 </body>
 </html>
